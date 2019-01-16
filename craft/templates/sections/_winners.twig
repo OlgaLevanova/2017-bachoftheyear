@@ -1,0 +1,17 @@
+{% set imagePlaceholder = siteUrl ~ "images/city.jpg" %}
+<section class="winners">
+    <div class="winners--text">
+        {{ craft.globals.getSetByHandle('winners').body }}
+    </div>
+    <div class="winners--list">
+        <ul class="winners-swiper">
+            {% for winner in craft.entries.section('winners') %}
+            <li>
+                <img src="{% if winner.winnerImage | length %}{{ winner.winnerImage.first.url }}{% else %}{{ imagePlaceholder }}{% endif %}" alt="">
+                <div class="winners--name">{{ winner.title }}</div>
+                <div>{{ winner.winnerCity }}</div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</section>

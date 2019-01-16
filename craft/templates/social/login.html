@@ -1,0 +1,30 @@
+{% extends "social/_layouts/site" %}
+
+{% set voteButtonTrackingClasss = 'facebook-not-voted' %}
+{% if currentUser %}
+    {% set voteButtonTrackingClasss = '' %}
+    {% redirect 'social' %}
+{% endif %}
+
+{% set title = "Login" %}
+
+{% block main %}
+	<br>
+    <div class="row ">
+        <div class="col-md-6 col-md-offset-3">
+            {% for provider in craft.social.getLoginProviders() %}
+				{% if provider.name == 'Facebook' %}
+                <p>
+                    <a href="{{ craft.social.loginUrl(provider.handle, { redirect: 'social' }) }}" class="btn btn-default btn-block btn-social {{ voteButtonTrackingClasss }}" data-provider="{{ provider.handle }}">
+                        <img src="{{ provider.getIconUrl() }}" />
+                        Login with {{ provider.name }}
+                    </a>
+                </p>
+				{% endif %}
+            {% endfor %}
+
+        </div>
+    </div>
+
+{% endblock %}
+

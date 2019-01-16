@@ -1,0 +1,152 @@
+.finalist-block{
+    &.bach{
+        display:block;
+        width:0;
+        color:$white;
+        opacity:0;
+
+
+        // Subtle shadow gradient to block behind content
+        .shadow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: $header-height * 2;
+            background-image: linear-gradient(to top, transparent, $blue-dark);
+            content: '';
+            opacity: 0.3;
+        }
+
+
+        @include backgroundTile();
+
+        &.bach-page{
+            width:25%;
+            height:auto;
+            opacity:1;
+
+            @media all and (max-width: $medium-breakpoint){
+                width:50%;
+            }
+            @media all and (max-width: $small-breakpoint){
+                width:100%;
+            }
+        }
+        &:hover,
+        &:active,
+        &:focus,
+        &.hover{
+            &.light-blue{
+                a{
+                    color:$blue-dark;
+                }
+                svg{
+                    circle{
+                        fill:$blue-light;
+                    }
+                    path{
+                        fill:$blue-dark;
+                    }
+                }
+            }
+            &.dark-blue{
+                a{
+                    color:$white;
+                }
+                svg{
+                    path{
+                        fill:$white;
+                    }
+                }
+            }
+            &.yellow{
+                svg{
+                    circle{
+                        fill:$yellow;
+                    }
+                    path{
+                        fill:$blue-dark;
+                    }
+                }
+            }
+
+            .bach-been-voted,
+            .bach-view{
+                opacity:1;
+            }
+        }
+
+        .bach-text{
+            position:absolute;
+            top:rem(30);
+            left:0;
+            width:100%;
+            padding:0 rem(20) 0 rem(76);
+            font-family:$GothamBook;
+            font-size:rem(12);
+            line-height: 1.35;
+
+            h3{
+                margin-bottom: 4px;
+                font-family:$GothamBold;
+                font-size:rem(14);
+            }
+        }
+        .bach-been-voted,
+        .bach-view{
+            opacity:0;
+            transition:all $bach-duration;
+        }
+        .bach-been-voted{
+            position:absolute;
+            top:50%;
+            left:rem(30);
+            width:100%;
+            padding-left:rem(33);
+            font-family:$GothamBold;
+            font-size:rem(32);
+            text-transform:uppercase;
+            transform:translateY(-50%);
+
+            &:before{
+                @include icomoon();
+
+                position:absolute;
+                top:50%;
+                left:0;
+                font-size:rem(24);
+                content:'\e912';
+                transform:translateY(-50%);
+            }
+
+            span{
+                font-family:$GothamBlack;
+                font-size:rem(12);
+            }
+        }
+        .bach-view{
+            position:absolute;
+            bottom:rem(30);
+            left:rem(30);
+            font-family:$GothamBlack;
+            font-size:rem(14);
+            text-transform:uppercase;
+        }
+        .bach-award{
+            position:absolute;
+            right:20px;
+            bottom:20px;
+
+            img,svg{
+                width:80px;
+                height:80px;
+            }
+            svg{
+                circle,path{
+                    transition:all 0.1s;
+                }
+            }
+        }
+    }
+}

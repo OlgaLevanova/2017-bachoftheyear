@@ -1,0 +1,22 @@
+{% set blockHandle = 'winA1000Block' %}
+
+{% if phase != 'phase1' %}
+    {% set blockHandle = 'votingIsClosed' %}
+{% endif %}
+
+{% set bodyField = 'body' %}
+
+{% if phase == 'phase3' %}
+    {% set bodyField = 'bodyPhase3' %}
+{% endif %}
+
+<div class="finalist-block
+    {{ blockHandle }}
+    {% if entryPosition == "inside" %} {{ blockHandle }}--inside {% endif %}
+    background-{{ entryColor }}"
+    {% if entryPosition == "inside" %} data-block="bach"{% endif %}
+>
+    <div>
+        {{ craft.globals.getSetByHandle(blockHandle)[bodyField] }}
+    </div>
+</div>

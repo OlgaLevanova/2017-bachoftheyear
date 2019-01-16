@@ -1,0 +1,36 @@
+.generic-section{
+    padding:rem(50) rem(20) rem(100);
+
+    h1{
+        margin:rem(37) 0;
+    }
+    h2{
+        margin:rem(46) 0 rem(26);
+    }
+    h3{
+        margin:rem(47) 0 rem(27);
+    }
+    ul{
+        padding:0;
+        margin:rem(14) 0 rem(25);
+        list-style:none;
+    }
+    li{
+        position:relative;
+        padding-left:rem(20);
+
+        &:before{
+            position:absolute;
+            top:7px;
+            left:0;
+            width:6px;
+            height:6px;
+            background:$grey;
+            border-radius:6px;
+            content:'';
+        }
+    }
+    img{
+        max-width:100%;
+    }
+}

@@ -1,0 +1,155 @@
+{% set topPlaceholder = "/assets/images/bach-placeholder.jpg" %}
+{% if entry.id == '2' %}
+    {% set vote_count = craft.social.totalVoteCount() %}
+{% else %}
+    {% set vote_count = craft.social.voteCount(entry.id) %}
+{% endif %}
+
+{% set entryBanner = entry.banner %}
+{% if entry.section.handle == 'homepage' %}
+    {% if phase == 'phase2' %}
+        {% set entryBanner = entry.bannerPhase2 %}
+    {% endif %}
+    {% if phase == 'phase3' %}
+        {% set entryBanner = entry.bannerPhase3 %}
+    {% endif %}
+{% endif %}
+
+{% set singleBanner = entryBanner %}
+{% if entryBanner | length %}
+    {% set randomNumber = random( entryBanner | length - 1 ) %}
+    {% set singleBanner = entryBanner[randomNumber] %}
+{% endif %}
+
+{# -------- #}
+{% set voteButtonTrackingClasss = 'facebook-not-voted' %}
+{% if currentUser %}
+    {% set voteButtonTrackingClasss = '' %}
+{% endif %}
+
+<section class="hero hero--{{ state.text }}">
+    <div class="swiper-container swiper-hero">
+        <div class="swiper-wrapper hero__inner-wrapper">
+            {% set sliderImages = entry.bachSliderImages is defined ? entry.bachSliderImages.find : null %}
+            {# Finalist page #}
+            {% if entry.section.handle == 'bach' %}
+                {% if sliderImages %}
+                    {% for image in sliderImages %}
+                        <div class="swiper-slide hero__slide">
+                            <img class="hero__img"
+                                    src="{{ image.url }}"
+                                    alt="{{ image.title }}">
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="swiper-slide hero__slide">
+                        <img class="hero__img"
+                                src="{{ topPlaceholder }}"
+                                alt="">
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="swiper-slide hero__slide">
+                    {%if singleBanner | length %}
+                        <img class="hero__img"
+                             src="{{ singleBanner.backgroundImageVideo.first.url }}"
+                         alt="{{ singleBanner.backgroundImageVideo.first.title }}">
+                    {% else %}
+                        <img class="hero__img"
+                             src="{{ topPlaceholder }}"
+                             alt="">
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+        {% if entry.section.handle == 'bach' and sliderImages %}
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+        {% endif %}
+    </div>
+
+    {% if singleBanner | length %}
+        <div class="hero__text {{ singleBanner.textColor.first | lower | replace(' ', '-') }}">
+            <div class="hero__text--wrapper">
+                <div class="hero__text-main">{{ singleBanner.headline1 }}</div>
+                <div class="hero__text-extra">{{ singleBanner.headlineSmall }}</div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if entry.section.handle != 'generic' %}
+    <div class="hero__bottom">
+        <div class="hero__badge">
+
+            <img src="{{ siteUrl }}images/logos/boty{% if state.badge != 'supreme' and entry.bachType.first and state.text != 'open' and state.text != 'closed' %}-{{ entry.bachType.first }}{% endif %}-{{ state.badge }}.svg" alt="">
+
+            {% if entry.suprimeWinner | length and phase == 'phase3' and entry.winner and entry.winner | length and entry.winner.value != 'no' %}
+                <div class="hero__badge-extra">
+                    <img src="{{ siteUrl }}images/logos/boty-{{ entry.bachType.first }}-yellow.svg" alt="">
+                </div>
+            {% endif %}
+        </div>
+
+        {# It's total mess #}
+        {# Get class for hero strip to indicate we need hover effect #}
+        {% set stripeLink = "" %}
+        {% if (phase == 'phase1' and entry.section.handle == 'bach' and vote == 0) or phase == 'phase3' and entry.section.handle == 'homepage' %}
+            {% set stripeLink = " hero__strip--link" %}
+        {% endif %}
+        <div class="hero__strip hero__strip--{{ phase }}{{ stripeLink }}">
+            {# Show only on homepage as it needs to be in a certain order #}
+            {% if not craft.request.segment(1) and state.text == 'closed' %}
+                <div class="hero__vote-item">
+                    <svg class="hero__vote-svg hero__vote-svg--tick" width="18" height="14" viewBox="0 0 18 14" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><path d="M-3-5h24v24H-3"/><path class="svg-icon" fill="#364E5D" fill-rule="nonzero" d="M6 11.2L1.8 7 .4 8.4 6 14 18 2 16.6.6"/></g></svg>
+                    <span class="hero__vote-text hero__vote-text--large">{{ vote_count }}</span>
+                    <span class="hero__vote-text hero__vote-text--small show-for-large">vote{% if vote_count != 1 %}s{% endif %}</span>
+                </div>
+            {% endif %}
+            {% if state.text == 'open' %}
+                {# If not homepage #}
+                {% if craft.request.firstSegment and vote == 0 %}
+                <a class="hero__vote-item btn btn-default btn-block btn-social {{ voteButtonTrackingClasss }}" href="{{ craft.social.loginUrl('facebook', { bach: entry.id }) }}" data-provider="facebook">
+                    <svg class="hero__vote-svg hero__vote-svg--fb" width="10" height="22" viewBox="0 0 10 22" xmlns="http://www.w3.org/2000/sv˘"><title>BookABach Facebook Vote link</title><path class="svg-icon" d="M2.143 22H6.43V11h3.18L10 6.6H6.594V4.84c0-.857.557-1.057.947-1.057h2.406V.013L6.636 0c-3.675 0-4.51 2.812-4.51 4.61V6.6H0V11h2.143v11z" fill="#364E5D" fill-rule="evenodd"/></svg>
+                    <span class="hero__vote-text hero__vote-text--vote">{{ voteText }}</span>
+                </a>
+                {% else %}
+                    <span class="hero__vote-item btn btn-default btn-block btn-social {{ voteButtonTrackingClasss }}">
+                        <span class="hero__vote-text hero__vote-text--vote">{{ voteText }}</span>
+                    </span>
+                {% endif %}
+            {% else %}
+                <div class="hero__vote-item">
+                    {% if voteText == 'Vote' %}
+                        <div class="hero__vote-text hero__vote-text--vote">
+                            <a href="{{ craft.social.loginUrl('facebook', { bach: entry.id }) }}" data-provider="facebook">
+                                <svg class="hero__vote-svg hero__vote-svg--fb" width="10" height="22" viewBox="0 0 10 22" xmlns="http://www.w3.org/2000/sv˘"><path class="svg-icon" d="M2.143 22H6.43V11h3.18L10 6.6H6.594V4.84c0-.857.557-1.057.947-1.057h2.406V.013L6.636 0c-3.675 0-4.51 2.812-4.51 4.61V6.6H0V11h2.143v11z" fill="#364E5D" fill-rule="evenodd"/></svg>
+                                <span class="hero__vote-text">Vote for this bach with Facebook</span>
+                            </a>
+                        </div>
+                    {% elseif not craft.request.segment(1) and state.text == 'supreme' %}
+                        <div class="hero__vote-text hero__vote-text--vote">
+                            <a href="{{ bachSupreme.url }}" class="hero__vote-text">
+                                {{ bachSupreme.title }}
+                            </a>
+                        </div>
+                    {% else %}
+                        {{ voteText }}
+                    {% endif %}
+                </div>
+            {% endif %}
+            {# Do not show on homepage as it needs to be in a different order #}
+            {% if craft.request.segment(1) %}
+                <div class="hero__vote-item">
+                    <svg class="hero__vote-svg hero__vote-svg--tick" width="18" height="14" viewBox="0 0 18 14" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><path d="M-3-5h24v24H-3"/><path class="svg-icon" fill="#364E5D" fill-rule="nonzero" d="M6 11.2L1.8 7 .4 8.4 6 14 18 2 16.6.6"/></g></svg>
+                    <span class="hero__vote-text hero__vote-text--large">{{ vote_count }}</span>
+                    <span class="hero__vote-text hero__vote-text--small show-for-large">vote{% if vote_count != 1 %}s{% endif %}</span>
+                </div>
+            {% elseif not craft.request.segment(1) and state.text == 'supreme' %}
+                <div class="hero__vote-item">
+                    <a href="{{ bachSupreme.url }}" class="hero__vote-text hero__vote-text--winner">View winner</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</section>

@@ -1,0 +1,55 @@
+$base-font-size: 16;
+
+/* Fonts */
+$font-path: '/fonts/';
+$font-default: Helvetica, Arial, sans-serif;
+
+$GothamBold: GothamBold, $font-default;
+$GothamLight: GothamLight, $font-default;
+$GothamBlack: GothamBlack, $font-default;
+$GothamBook: GothamBook, $font-default;
+$GothamBookItalic: GothamBookItalic, $font-default;
+$GothamMedium: GothamMedium, $font-default;
+$GabrielloBold: GabrielloBold, $font-default;
+
+/* Colours */
+$white: #FFFFFF;
+$grey: #4A4A4A;
+$grey-light: #F0F0F0;
+$grey-light-2: #9B9B9B;
+$grey-light-3: #FBFBFB;
+$blue-dark: #364E5D;
+$blue-light: #B5CED3;
+$blue-lighter: #E9F2F3;
+$blue-facebook: #146AB2;
+$yellow: #FDD863;
+$beige: #E8D9C8;
+$faded-orange: #E79348;
+$error: #D0011B;
+
+/* Breakpoints */
+$xsmall-breakpoint: 480px;
+$small-breakpoint-min: 767px;
+$small-breakpoint: 768px;
+$small-breakpoint-max: 769px;
+$medium-breakpoint: 991px;
+$large-breakpoint: 1200px;
+$x-large-breakpoint: 1440px;
+
+$swiper-breakpoint1: 1300px;
+
+$gutter-small: 7px;
+$gutter-medium: 10px;
+$gutter-large: 15px;
+
+$breakpoints: (
+    xs: $xsmall-breakpoint,
+    s: $small-breakpoint,
+    m: $medium-breakpoint,
+    l: $large-breakpoint,
+    xl: $x-large-breakpoint
+);
+
+$header-height:80px;
+
+$bach-duration:0.2s;

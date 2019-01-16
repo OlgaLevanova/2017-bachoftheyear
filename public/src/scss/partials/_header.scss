@@ -1,0 +1,359 @@
+.header {
+    position:absolute;
+    top:0;
+    left:0;
+    z-index: 2;
+    width:100%;
+    height:$header-height;
+    color:$white;
+    border-bottom:1px solid rgba($white, 0.2);
+
+    // Subtle gradient to overlay top of page, behind header content
+    &::before {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        width: 100%;
+        height: $header-height * 2;
+        background-image: linear-gradient(to top, transparent, $blue-dark);
+        content: '';
+        opacity: 0.3;
+    }
+
+    &:after{
+        width:100%;
+        height:0;
+        clear:both;
+        content:'';
+    }
+
+    &.header--no-email-error{
+        top:$header-height;
+
+        @media all and (max-width: 600px){
+            top:rem(120);
+        }
+        @media all and (max-width: 450px){
+            top:rem(150);
+        }
+    }
+
+    a{
+        color:$white;
+        text-decoration:none;
+    }
+    .header-square,
+    .header-square--right{
+        width:calc(#{$header-height} - 1px);
+        height:$header-height;
+        border-right:1px solid rgba($white, 0.2);
+    }
+    .header-square--right{
+        display:none;
+        border-right:none;
+        border-left:1px solid rgba($white, 0.2);
+
+        @media all and (max-width:$large-breakpoint){
+            display:block;
+        }
+
+        &.header__category-active{
+            @media all and (max-width:320px){
+                border-left:none;
+            }
+        }
+    }
+    .header__logo{
+        float:left;
+
+        img{
+            width:50px;
+            height:32px;
+            margin:24px 0 0 15px;
+        }
+    }
+    .header__link{
+        float:left;
+
+        img{
+            width:24px;
+            height:24px;
+            margin:28px 0 0 28px;
+            transform:rotate(180deg);
+        }
+    }
+    .header__bach-title{
+        display:block;
+        float:left;
+        margin:22px 0 0 28px;
+        font-size:rem(24);
+        letter-spacing: -0.5px;
+
+        @media all and (max-width:$medium-breakpoint){
+            display:none;
+        }
+
+        span{
+            padding-left:4px;
+            font-family:$GothamBook;
+            font-size:rem(14);
+        }
+    }
+
+    .header__menu-toggle{
+        position:relative;
+        float:right;
+        cursor:pointer;
+
+        /*>div{
+            height:$header-height;
+            padding-top:30px;
+            text-align:center;
+        }*/
+    }
+    .header__category-active{
+        float:right;
+        font-size:30px;
+
+        @media all and (min-width:$large-breakpoint){
+            display:none !important;
+        }
+
+        span{
+            position:relative;
+            display:block;
+            margin:25px 0 0 25px;
+        }
+    }
+
+    .header__menu{
+        display:block;
+        float:right;
+
+        @media all and (max-width:$large-breakpoint){
+            position:absolute;
+            top:0;
+            left:0;
+            z-index:-1;
+            float:none;
+            width:100%;
+            height:0;
+            overflow:hidden;
+            background:rgba($blue-dark, 0.9);
+        }
+    }
+    .header__menu-title{
+        display:inline-block;
+        margin-top:35px;
+        font-family: $GothamBlack;
+        font-size:rem(12);
+        line-height:1;
+        letter-spacing: -0.4px;
+        text-transform:uppercase;
+        vertical-align:top;
+
+        @media all and (max-width:$large-breakpoint){
+            display:none;
+        }
+    }
+    .header__menu-list{
+        z-index: 2;
+        display:inline-block;
+        padding:0 23px 0 19px;
+        margin:0;
+        line-height:1;
+        white-space: nowrap;
+        vertical-align:top;
+        list-style:none;
+
+        @media all and (max-width:$large-breakpoint){
+            width:100%;
+            height: calc(100vh - #{$header-height});
+            padding:17px 11px 32px;
+            margin-top:$header-height;
+            white-space: normal;
+            border-top:1px solid rgba($white, 0.2);
+        }
+
+        li{
+            position:relative;
+            float:left;
+            height:$header-height;
+            padding:0;
+            margin:0;
+            vertical-align:top;
+            transition:all 0.3s;
+
+            @media all and (max-width:$large-breakpoint){
+                width:12.5%;
+                height:auto;
+                text-align:center;
+            }
+            @media all and (max-width:$medium-breakpoint){
+                width:16.6666%;
+            }
+            @media all and (max-width:$small-breakpoint){
+                width:33.3333%;
+            }
+
+
+            &:hover{
+                padding-top:15px;
+
+                @media all and (max-width:$large-breakpoint){
+                    padding-top:0;
+                }
+            }
+
+            &.header__menu-category--active{
+                padding-top:15px;
+
+                &:after{
+                    position:absolute;
+                    bottom:-3px;
+                    left:50%;
+                    width:10px;
+                    height:10px;
+                    background:$white;
+                    border-radius:50%;
+                    content:'';
+                    transform:translateX(-50%);
+                }
+
+                @media all and (max-width:$large-breakpoint){
+                    padding-top:0;
+
+                    &:after{
+                        display:none;
+                    }
+                }
+            }
+        }
+
+        a{
+            position:relative;
+            display:inline-block;
+            padding:0 8px;
+            margin-top:25px;
+            color:$white;
+            font-size:30px;
+            text-decoration:none;
+
+            span{
+                @include icomoon();
+
+                &.category-charm{
+                    &:before{
+                        content: '\e908';
+                    }
+                }
+                &.category-design{
+                    &:before{
+                        content: '\e909';
+                    }
+                }
+                &.category-eco-friendly{
+                    &:before{
+                        content: '\e90a';
+                    }
+                }
+                &.category-family-friendly{
+                    &:before{
+                        content: '\e90b';
+                    }
+                }
+                &.category-hospitality{
+                    &:before{
+                        content: '\e90c';
+                    }
+                }
+                &.category-pet-friendly{
+                    &:before{
+                        content: '\e90d';
+                    }
+                }
+                &.category-setting{
+                    &:before{
+                        content: '\e90e';
+                    }
+                }
+                &.category-urban{
+                    &:before{
+                        content: '\e90f';
+                    }
+                }
+            }
+
+            @media all and (max-width:$large-breakpoint){
+                padding:0 24px;
+                font-size:60px;
+
+                span{
+                    &.category-charm{
+                        &:before{
+                            content: '\e900';
+                        }
+                    }
+                    &.category-design{
+                        &:before{
+                            content: '\e901';
+                        }
+                    }
+                    &.category-eco-friendly{
+                        &:before{
+                            content: '\e902';
+                        }
+                    }
+                    &.category-family-friendly{
+                        &:before{
+                            content: '\e903';
+                        }
+                    }
+                    &.category-hospitality{
+                        &:before{
+                            content: '\e904';
+                        }
+                    }
+                    &.category-pet-friendly{
+                        &:before{
+                            content: '\e905';
+                        }
+                    }
+                    &.category-setting{
+                        &:before{
+                            content: '\e906';
+                        }
+                    }
+                    &.category-urban{
+                        &:before{
+                            content: '\e907';
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+
+
+    .header__category-active--voted,
+    .header__menu-category--voted{
+        span{
+            position:relative;
+
+            @include category-voted-icon-sm;
+        }
+    }
+    .header__menu-category--voted{
+        span{
+            &:after{
+                @media all and (max-width:$large-breakpoint){
+                    top:-4px;
+                    right:0;
+                    left:auto;
+                }
+            }
+        }
+    }
+}

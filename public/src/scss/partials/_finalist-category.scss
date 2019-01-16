@@ -1,0 +1,127 @@
+.finalist-block{
+    &.category{
+        color:$white;
+        cursor:pointer;
+
+        @include backgroundTile();
+
+        &:hover,
+        &:active,
+        &:focus,
+        &.hover{
+            .category-view{
+                opacity:1;
+            }
+            &.category-selected{
+                &:before{
+                    width:95%;
+                    height:95%;
+                }
+            }
+        }
+        &.category-selected{
+            &:before{
+                width: calc(100% + 2px);
+                height: calc(100% + 2px);
+                opacity:0.9;
+            }
+            .category-view{
+                opacity:0;
+            }
+            .category-close{
+                opacity:1;
+            }
+        }
+
+        .category-view,
+        .category-close{
+            position:absolute;
+            bottom:rem(33);
+            left:0;
+            width:100%;
+            text-align:center;
+            opacity:0;
+            transition:all 0.2s;
+        }
+        .category-view{
+            bottom:rem(33);
+            font-family:$GothamBlack;
+            font-size:rem(12);
+            text-transform:uppercase;
+        }
+        .category-close{
+            @include icomoon();
+
+            bottom: 12.5%;
+            font-size:rem(24);
+
+            @include bp(l) {
+                bottom: 7.5%;
+            }
+        }
+        .category-name{
+            @include icomoon();
+
+            position:absolute;
+            top:50%;
+            left:50%;
+            font-size:rem(180);
+            transform:translate(-50%, -50%);
+
+            &:before {
+                text-shadow: 0 0 rem(10) rgba(0, 0, 0, 0.15);
+            }
+
+            &.category-voted{
+                &:after{
+                    position:absolute;
+                    top:rem(-15);
+                    right:rem(4);
+                    width:rem(60);
+                    height:rem(60);
+                    background:url('/images/icons/icon-voted-small.svg');
+                    background-size:rem(60) rem(60);
+                    content:'';
+                }
+            }
+            &.category-{
+                @include categories-icons-big;
+            }
+        }
+    }
+
+    .category-icon{
+        @include icomoon();
+
+        position:absolute;
+        top: 0;
+        left: 0;
+        margin: 30px;
+        font-size:rem(30);
+
+        &.parent-category-{
+            @include categories-icons-small;
+        }
+        &.parent-category-voted{
+            @include category-voted-icon-sm;
+        }
+    }
+
+    &.category-description{
+        width:0;
+        font-family:$GothamBook;
+        font-size:rem(14);
+        line-height:1.57;
+        opacity:0;
+
+        .category-description-text{
+            padding:rem(80) rem(55) 0 rem(30);
+        }
+        h2{
+            padding-bottom:rem(20);
+            font-family:$GothamBold;
+            font-size:rem(18);
+            line-height:1.22;
+        }
+    }
+}

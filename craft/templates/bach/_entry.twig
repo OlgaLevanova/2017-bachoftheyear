@@ -1,0 +1,221 @@
+{% extends "_layout" %}
+
+{% block content %}
+
+{% if no_email == true %}
+    <div class="no-email-error">
+		<p>Unfortunately your vote was not counted as we couldn’t retrieve your email address from Facebook. Please try again.</p>
+		<span class="no-email-error--close icomoon-icon-close"></span>
+	</div>
+{% endif %}
+
+	{% include "/sections/_hero" with {
+		state: state,
+		voteText: voteText
+	} %}
+
+    {% set bachentry %}
+    {% cache %}
+	<div class="finalist">
+		<article class="finalist__profile">
+			<header class="finalist__header">
+				<h1 class="finalist__title">{{ entry.title }}</h1>
+				<h2 class="finalist__subtitle">{{ entry.bachLocationTitle }}</h2>
+				<h3 class="finalist__detail">
+					<span class="finalist__type">{{ entry.bachTypeText }}</span>
+					<span class="finalist__id">#{{ entry.bachNumber }}</span>
+				</h3>
+			</header>
+			<div class="finalist__description finalist__text">
+				{{ entry.bachDescription }}
+			</div>
+			<div class="finalist__stat-wrapper">
+				<div class="finalist__stat">
+					{% set guestCount = entry.amountOfGuests %}
+					<svg class="finalist__stat-icon finalist__stat-icon--guests" xmlns="http://www.w3.org/2000/svg" width="30" height="24" viewBox="0 0 30 24"><g fill="none" fill-rule="evenodd" stroke="#364E5D" stroke-linejoin="round"><path d="M9.854 23.196H19.5v-5.5c0-.63-3.848-2.74-7-4v-2.5s1.24-.42 1.24-3.13c.876 0 1.26-2.522.04-2.522 0-.267.966-1.65.59-3.152-.63-2.522-6.935-2.522-7.565 0-2.655-.543-.63 2.788-.63 3.152-1.26 0-.88 2.522 0 2.522 0 2.71 1.325 3.13 1.325 3.13v2.5c-3.152 1.26-7 3.37-7 4v5.5h9.354z"/><path stroke-linecap="round" d="M22.5 23.196h7v-5.674c0-.63-3.478-1.318-6-2.326v-2s1.587-.44 1.587-2.608c.702 0 .976-2.522 0-2.522 0-.214 1.022-1.347.63-2.522-.63-1.89-5.674-1.89-6.304 0-2.124-.434-.63 2.23-.63 2.522-1.01 0-.702 2.522 0 2.522 0 2.168 1.717 2.608 1.717 2.608v1.5"/></g></svg>
+					<span class="finalist__stat-text">{{ guestCount }} Guest{{ guestCount and guestCount > 1 ? 's' }}</span>
+				</div>
+				<div class="finalist__stat">
+					{% set bedroomCount = entry.amountOfBedrooms %}
+					<svg class="finalist__stat-icon finalist__stat-icon--bedrooms"  xmlns="http://www.w3.org/2000/svg" width="19" height="31" viewBox="0 0 19 31"><g fill="none" fill-rule="evenodd" stroke="#364E5D"><path d="M18.5 28.12v-25L7.046.62v30z"/><path d="M7.33 4.34H2.42v22h4.91"/><path d="M7.045 2.34H.5v26h6.545M10.1 15.62c0 .547-.316.99-.71.99-.39 0-.708-.443-.708-.99 0-.546.317-.99.71-.99.392 0 .71.444.71.99z"/></g></svg>
+					<span class="finalist__stat-text">
+					{% if bedroomCount > 0 %}
+					{{ bedroomCount }}
+					Bedroom{{ bedroomCount and bedroomCount > 1 ? 's' }}
+					{% else %}
+					Studio
+					{% endif %}
+					</span>
+				</div>
+				<div class="finalist__stat">
+					{% set bedCount = entry.amountOfBeds %}
+					<svg class="finalist__stat-icon finalist__stat-icon--beds" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30"><g fill="none" fill-rule="evenodd" stroke="#364E5D" stroke-linecap="round" stroke-linejoin="round"><path d="M20.875 5.5H23.5l6 15H.5l6-15h2.625m20.375 21c0 1.045-.956 2-2 2h-25c-1.045 0-2-.955-2-2v-6h29v6zm-25-16h21"/><path d="M22 8.5H8l1.5-4h11z"/><path d="M6.5 5.5v-3c0-1.045.955-2 2-2h13c1.044 0 2 .955 2 2v3m-19 23v1m21-1v1"/></g></svg>
+					<span class="finalist__stat-text">{{ bedCount }} Bed{{ bedCount and bedCount > 1 ? 's' }}</span>
+				</div>
+				<div class="finalist__stat">
+					{% set bathroomCount = entry.amountOfBathrooms %}
+					<svg class="finalist__stat-icon finalist__stat-icon--bathrooms" xmlns="http://www.w3.org/2000/svg" width="23" height="31" viewBox="0 0 23 31"><g fill="none" fill-rule="evenodd" stroke="#364E5D"><path d="M22.236 30.5V8a7.5 7.5 0 0 0-15 0v.278"/><path d="M.5 14.653a6.735 6.735 0 0 1 13.47 0H.5zm2.59 2.074v6.937m2.764-6.937v6.937m2.764-6.937v6.937m2.763-6.937v6.937"/></g></svg>
+					<span class="finalist__stat-text">{{ bathroomCount }} Bathroom{{ bathroomCount and bathroomCount > 1 ? 's' }}</span>
+				</div>
+			</div>
+			<div class="finalist__row">
+				<div class="finalist__item finalist__price">
+					<div class="finalist__price-item finalist__text">From</div>
+					<div class="finalist__price-item finalist__price-num">${{ entry.price }}</div>
+					<div class="finalist__price-item finalist__text">Per night</div>
+				</div>
+				<div class="finalist__item finalist__star-wrapper">
+					{% set rating = entry.stars %}
+					{# Find star number that needs to be a half-star if rating is a float #}
+					{% set halfStarNum = '.5' in rating ? rating|number_format : null %}
+					{% for i in 1..5 %}
+						{% if halfStarNum == i %}
+							{# Half star #}
+							<svg class="finalist__star" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24"><defs><path id="a" d="M0 0h24v24H0z"/></defs><g fill="none" fill-rule="evenodd"><mask id="b" fill="#fff"><use xlink:href="#a"/></mask><path fill="{{ state.hex }}" fill-rule="nonzero" d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4V6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z" mask="url(#b)"/></g></svg>
+						{% elseif i <= rating %}
+							{# Full star #}
+							<svg class="finalist__star" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><path fill="{{ state.hex }}" fill-rule="nonzero" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/><path d="M0 0h24v24H0z"/></g></svg>
+						{% else %}
+							{# Empty star #}
+							<svg class="finalist__star" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><path fill="{{ state.hex }}" fill-rule="nonzero" d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/><path d="M0 0h24v24H0z"/></g></svg>
+						{% endif %}
+					{% endfor %}
+				</div>
+			</div>
+			<div class="finalist__button-wrapper">
+				<a class="finalist__button" href="{{ entry.bachUrl }}" target="_blank">View and book</a>
+			</div>
+			<div class="finalist__other finalist__other--show-for-large-up">
+				Other baches in this category
+			</div>
+		</article>
+
+		<div class="finalist__aside">
+			<div class="finalist__aside-block">
+				<div class="finalist__aside-header">Recent votes</div>
+				data-recent-votes
+			</div>
+			{% set review = entry.bachFeedback.first ?? null %}
+			{% if review %}
+				<div class="finalist__aside-block">
+					<div class="finalist__aside-header">Recent review</div>
+					<blockquote class="finalist__review-quote">
+						<div class="finalist__review-comment">“{{ review.feedbackComment }}”</div>
+						<div class="finalist__review-name">- {{ review.feedbackName }}</div>
+					</blockquote>
+				</div>
+			{% endif %}
+
+			<div class="finalist__aside-block">
+				<!-- Go to www.addthis.com/dashboard to customize your tools -->
+				<div class="addthis_inline_share_toolbox"></div>
+			</div>
+
+			{% if entry.bachLocation %}
+				<div class="finalist__aside-block finalist__aside-block--map">
+					{{ craft.smartMap.map(entry.bachLocation, {
+						zoom: 14,
+						disableDefaultUI: false,
+						scrollwheel: true,
+						markerOptions: {
+							icon: siteUrl ~ 'images/icons/map-pointer.svg'
+						}
+					}) }}
+				</div>
+			{% endif %}
+		</div>
+		<div class="finalist__other finalist__other--hide-for-large-up">
+			Other baches in this category
+		</div>
+	</div>
+
+	<div class="finalists">
+		{% set color = '' %}
+		{% set category = '' %}
+		{% for _category in craft.categories.group('finalistCategories').search('title:' ~ entry.bachType.first) %}
+			{% set color = _category.categoryColor.first | lower | replace(' ', '-') %}
+			{% set category = _category %}
+		{% endfor %}
+
+		{% for bach in craft.entries.section('bach').search('bachType:' ~ entry.bachType.first).id('not ' ~ entry.id) %}
+			{% include "/sections/blocks/_bach-blocks" with {
+				entryClass:"finalist-block bach bach-page",
+				color: color,
+				categoryId: category.id,
+				category: entry.bachType.first
+			} %}
+		{% endfor %}
+	</div>
+{% endcache %}
+{% endset %}
+
+{# Set up and array of all dynamic content needing to be replaced dynamically #}
+{% set replaces = [] %}
+
+{% set recent_votes = craft.social.recentVotes(entry.id) %}
+
+{% set recent_vote_html = '<ul class="finalist__voter-list">' %}
+    {% for row in recent_votes %}
+        {% set recent_vote_html = recent_vote_html ~ '<li class="finalist__voter-li">' %}
+            {% set recent_vote_html = recent_vote_html ~ '<img class="finalist__voter-img"' %}
+                {% if row['photo'] is null %}
+                    {% set recent_vote_html = recent_vote_html ~ 'src="http://placehold.it/60x60">' %}
+                {% else %}
+                    {% set recent_vote_html = recent_vote_html ~ 'src="/cpresources/userphotos/'~row['username']~'/60/'~row['photo']~'">' %}
+                {% endif %}
+        {% set recent_vote_html = recent_vote_html ~ '</li>' %}
+    {% endfor %}
+{% set recent_vote_html = recent_vote_html ~ '</ul>' %}
+
+{% set replaces = replaces|merge({ ('data-recent-votes'): recent_vote_html }) %}
+
+{% set all_bach_ids = craft.entries.section('bach').ids() %}
+{% for b_id in all_bach_ids %}
+    {% set replaces = replaces|merge({ ('data-vote-count-'~b_id): '0 <span>votes</span>' }) %}
+{% endfor %}
+
+{% set all_votes = craft.social.AllVoteCount() %}
+{% for key, value in all_votes %}
+    {% if value.votes == 1 %}
+        {% set replaces = replaces|merge({ ('data-vote-count-'~value.bach_id): value.votes ~ ' <span>vote</span>' }) %}
+    {% else %}
+        {% set replaces = replaces|merge({ ('data-vote-count-'~value.bach_id): value.votes ~ ' <span>votes</span>' }) %}
+    {% endif %}
+{% endfor %}
+
+{% for category in craft.categories.group('finalistCategories') %}
+    {% if phase == "phase1" %}
+        {% set replaces = replaces|merge({ ('data-vote-bach-view-'~category.id): 'Vote now' }) %}
+    {% else %}
+        {% set replaces = replaces|merge({ ('data-vote-bach-view-'~category.id): 'View finalist' }) %}
+    {% endif %}
+{% endfor %}
+
+{% for vote_category in vote_categories %}
+    {% set replaces = replaces|merge({ ('data-voted-category-'~vote_category): 'category-voted' }) %}
+    {% set replaces = replaces|merge({ ('data-vote-bach-view-'~vote_category): 'View finalist' }) %}
+{% endfor %}
+
+{% for vote_bach in vote_bachs %}
+    {% set replaces = replaces|merge({ ('data-voted-bach-'~vote_bach): 'parent-category-voted' }) %}
+{% endfor %}
+
+{# Replace all dynamic content from above #}
+{% for key, value in replaces %}
+    {% set bachentry = bachentry|replace({(key) : (value),}) %}
+{% endfor %}
+
+{{ bachentry|raw }}
+
+<div class="map-data-dynamic">
+{{ craft.smartMap.map(entry.bachLocation, {
+    zoom: 14,
+    disableDefaultUI: false,
+    scrollwheel: true,
+    markerOptions: {
+        icon: siteUrl ~ 'images/icons/map-pointer.svg'
+    }
+}) }}
+</div>
+
+{% endblock %}

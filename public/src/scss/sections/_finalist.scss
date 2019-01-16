@@ -1,0 +1,325 @@
+.finalist {
+    display: flex;
+    flex-flow: row wrap;
+
+    &__profile,
+    &__aside {
+        flex: 0 0 100%;
+        max-width: 100%;
+
+        @include bp(l) {
+            flex: 0 0 50%;
+            max-width: 50%;
+        }
+    }
+
+    &__profile {
+        position: relative;
+        padding: 157px 20px 0;
+        overflow: hidden;
+
+        @include bp(m) {
+            padding-top:107px;
+        }
+        @include bp(l) {
+            padding: 110px 79px 0;
+        }
+
+        @include bp(xl) {
+            padding: 150px 110px 0;
+        }
+    }
+
+    &__aside {
+        position: relative;
+        padding-top: 78px;
+        background-color: $blue-lighter;
+
+        @include bp(l) {
+            padding-top: 94px;
+        }
+    }
+
+    &__aside-block:not(.finalist__aside-block--map) {
+        padding: 0 20px;
+
+        @include bp(l) {
+            padding: 0 52px;
+        }
+    }
+
+    &__row {
+        @include flex-row;
+        align-items: flex-end;
+        justify-content: space-between;
+        margin-top: 20px;
+        margin-bottom: 40px;
+    }
+
+    &__item {
+        @include flex-item;
+    }
+
+    &__title {
+        display: inline-block;
+        margin-right: 19px;
+        color: $blue-dark;
+        font-size: rem(28);
+        letter-spacing: -0.6px;
+        vertical-align: bottom;
+    }
+
+    &__subtitle {
+        display: inline-block;
+        color: $blue-dark;
+        font-size: rem(14);
+        letter-spacing: -0.5px;
+        vertical-align: bottom;
+    }
+
+    &__detail {
+        display: block;
+        margin: 23px 0 17px;
+        color: $blue-dark;
+        font-family:$GothamBold;
+        font-size: rem(14);
+        line-height: 1.57;
+        letter-spacing: -0.7px;
+    }
+
+    &__type {
+        margin-right: 30px;
+    }
+
+    &__text {
+        font-size: rem(14);
+        font-weight: 300;
+        line-height: 1.71;
+        letter-spacing: -0.5px;
+
+        p {
+            margin: 20px 0;
+        }
+
+        img {
+            max-width: 100%;
+        }
+    }
+
+    &__stat-wrapper {
+        @include flex-row(30px);
+        margin-top: 40px;
+        margin-bottom: 10px;
+
+        @include bp(l) {
+            flex-wrap: nowrap;
+            margin-bottom: 50px;
+        }
+    }
+
+    &__stat {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding-left: 30px;
+        margin-bottom: 30px;
+        @include flex-item(0 0 50%, 30px);
+
+        @include bp(s) {
+            flex-basis:auto;
+        }
+    }
+
+    &__stat-icon,
+    &__stat-text {
+        flex: 0 0 auto;
+    }
+
+    &__stat-text {
+        display: inline-block;
+        margin-top: 12px;
+        color: $blue-dark;
+        font-family: GothamBold;
+        font-size: rem(14);
+        line-height: 1.57;
+    }
+
+    &__stat-icon {
+        display: block;
+    }
+
+    &__star-wrapper {
+        margin-top: 20px;
+    }
+
+    &__price-item {
+        display: inline-block;
+        line-height: 1.57;
+
+        &:first-child {
+            display: block;
+            margin-bottom: 7px;
+        }
+    }
+
+    &__price-num {
+        margin-right: 4px;
+        color: $blue-dark;
+        font-family: GothamBold;
+        font-size: rem(32);
+        line-height: 0.69;
+        letter-spacing: -1px;
+    }
+
+    &__button-wrapper {
+        margin-bottom: 93px;
+
+        @include bp(l) {
+            margin-bottom: 167px;
+        }
+    }
+
+    &__button {
+        display: block;
+        height: 80px;
+        color: #FFFFFF;
+        font-family: GothamBold;
+        font-size: rem(18);
+        line-height: 80px;
+        letter-spacing: -0.5px;
+        text-align: center;
+        text-decoration: none;
+        text-transform: uppercase;
+        cursor: pointer;
+        background-color: $blue-dark;
+        transition: color 0.2s, background-color 0.2s;
+
+        &:hover,
+        &:focus {
+            color: $blue-dark;
+            background-color: $yellow;
+        }
+    }
+
+    // Reserve height in parent container for map as well
+    .finalist__aside-block--map,
+    .smartmap-mapcanvas {
+        width: 100%;
+        height: 320px;
+
+        @include bp(l) {
+            height: 360px;
+        }
+    }
+
+    .smartmap-mapcanvas {
+        position: absolute !important;
+        bottom: 0;
+    }
+
+    &__voter-list {
+        padding-left: 0;
+        margin-top: 24px;
+        margin-bottom: 60px;
+        @include flex-row(10px);
+        list-style: none;
+    }
+
+    &__voter-li {
+        position: relative;
+        @include flex-item(0 0 auto, 10px);
+
+        // tick circle
+        &::before {
+            position: absolute;
+            top: -4px;
+            right: 10px;
+            width: 20px;
+            height: 20px;
+            background-color: $yellow;
+            border-radius: 100%;
+            content: '';
+        }
+
+        &::after {
+            position: absolute;
+            top: 0;
+            right: 18px;
+            width: 3px;
+            height: 8px;
+            border-top: 1px solid $blue-dark;
+            border-left: 1px solid $blue-dark;
+            content: '';
+            transform: rotate(-135deg);
+        }
+    }
+
+    &__voter-img {
+        border-radius: 100%;
+    }
+
+    &__aside-header {
+        margin-bottom: 17px;
+        color: $blue-dark;
+        font-family: GothamBold;
+        font-size: rem(14);
+        line-height: 1.57;
+        letter-spacing: -0.5px;
+    }
+
+    &__review-quote {
+        margin: 0 0 70px 0;
+
+        @include bp(l) {
+            margin-bottom: 80px;
+        }
+    }
+
+    &__review-name {
+        margin-top: 10px;
+        color: $blue-dark;
+        font-family: GothamMedium;
+        font-size: rem(14);
+        line-height: 1.57;
+        letter-spacing: -0.5px;
+    }
+
+    &__review-comment {
+        color: $blue-dark;
+        font-size: rem(16);
+        font-style: italic;
+        line-height: 1.63;
+        letter-spacing: -0.5px;
+    }
+
+    &__other {
+        width: 100%;
+        padding: 29px 30px 26px;
+        color: $blue-dark;
+        font-family: GothamBold;
+        font-size: rem(16);
+        background-color: $blue-lighter;
+
+        @include bp(l) {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+
+        &--show-for-large-up {
+            display: none;
+
+            @include bp(l) {
+                display: block;
+            }
+        }
+
+        &--hide-for-large-up {
+            display: block;
+
+            @include bp(l) {
+                display: none;
+            }
+        }
+    }
+}

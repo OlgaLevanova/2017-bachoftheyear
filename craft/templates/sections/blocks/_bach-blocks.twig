@@ -1,0 +1,40 @@
+{% set bachPlaceholder = "/assets/images/bach4.jpg" %}
+
+<a href="{{ bach.url }}" class="{{ entryClass }} {{ color }}" data-block="bach">
+    <div class="shadow"></div>
+    {% if bach.bachPreview | length %}
+    <img src="{{ bach.bachPreview.first.url }}" alt="">
+    {% else %}
+    <img src="{{ bachPlaceholder }}" alt="">
+    {% endif %}
+    <div class="
+        category-icon
+        parent-category-{{ category }}
+        data-voted-bach-{{ bach.id }}
+        "></div>
+    <div class="bach-text">
+        <h3>{{ bach.title }}</h3>
+        {{ bach.bachLocationTitle }}
+    </div>
+    <div class="bach-been-voted">
+        data-vote-count-{{ bach.id }}
+    </div>
+    <span class="bach-view">
+        data-vote-bach-view-{{ categoryId }}
+    </span>
+
+    {% if phase != "phase1" and bach.winner.value != '' and bach.winner.value != 'no' %}
+        {% set winnerColor = bach.winner.value %}
+        {#{% if bach.winner.value == 'gold' %}
+            {% set winnerColor = 'yellow' %}
+        {% endif %}#}
+    <div class="bach-award bach-award--{{ winnerColor }}">
+        {% include "/partials/svg/_boty-" ~ bach.bachType.first with {
+            text:badgeColors.darkBlue,
+            back:badgeColors[bach.winner.value],
+            type:bach.winner.value
+        } %}
+        {#<img src="{{ siteUrl }}images/logos/boty-{{ bach.bachType.first }}-{{ winnerColor }}.svg" alt="">#}
+    </div>
+    {% endif %}
+</a>

@@ -1,0 +1,78 @@
+.outer-dots{
+    position:absolute;
+    top:50%;
+    left:50%;
+    width:24px;
+    height:24px;
+    transform:translate(-50%, -50%);
+
+    &.is-closed:hover,
+    .header__menu--opened &{
+        .dot-2,
+        .dot-4,
+        .dot-6,
+        .dot-8{
+            top:50%;
+            left:50%;
+            transform:translate(-50%, -50%);
+        }
+        .dot-1,
+        .dot-3{
+            height:30px;
+        }
+    }
+}
+.dots{
+    position:absolute;
+    width:5px;
+    height:5px;
+    background:$white;
+    border-radius:2.5px;
+    transition:all 0.4s;
+    will-change: transform, opacity;
+}
+.dot-1{
+    top:2px;
+    left:-1px;
+    transform:rotate(-45deg);
+    transform-origin:0 0;
+}
+.dot-2{
+    top:0;
+    left:50%;
+    transform:translate(-50%, 0);
+}
+.dot-3{
+    top:-1px;
+    right:-2px;
+    transform:rotate(45deg);
+    transform-origin:0 0;
+}
+.dot-4{
+    top:50%;
+    left:0;
+    transform:translate(0, -50%) rotate(-45deg);
+}
+.dot-5{
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+}
+.dot-6{
+    top:50%;
+    right:0;
+    transform:translate(0, -50%);
+}
+.dot-7{
+    bottom:0;
+    left:0;
+}
+.dot-8{
+    bottom:0;
+    left:50%;
+    transform:translate(-50%, 0);
+}
+.dot-9{
+    right:0;
+    bottom:0;
+}

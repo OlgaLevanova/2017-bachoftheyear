@@ -1,0 +1,68 @@
+<header class="header{% if no_email == true and entry.type == 'bach' %} header--no-email-error{% endif %}">
+
+    <a href="/" class="header-square header__logo">
+        <img src="/images/logos/bach-of-the-year.svg" alt="Bach of the year">
+    </a>
+
+    {% set siblingEntry = null %}
+    {% if entry is defined and entry.type == 'bach' %}
+        {% set siblingEntry = craft.entries.positionedAfter(entry).order('lft asc').with('bachType').first %}
+    {% endif %}
+    {% if siblingEntry %}
+        {% set isInSameCategory = siblingEntry.bachType[0] == entry.bachType.first ? true : false %}
+    {% endif %}
+    {% if siblingEntry and isInSameCategory %}
+        <a href="{{ siblingEntry.url }}" class="header-square header__link" data-category>
+            <img src="/images/icons/icon-arrow.svg" alt="Go to next finalist in this category">
+        </a>
+    {% endif %}
+
+    {# Show this only on Bach page #}
+    {% if firstSegment == 'bach' %}
+        <div class="header__bach-title">
+            {{ entry.title }} <span>{{ entry.bachLocationTitle }}</span>
+        </div>
+    {% endif %}
+
+    <div class="header-square--right header__menu-toggle">
+        <div class="outer-dots is-closed">
+            <div class="dots dot-1"></div>
+            <div class="dots dot-2"></div>
+            <div class="dots dot-3"></div>
+            <div class="dots dot-4"></div>
+            <div class="dots dot-5"></div>
+            <div class="dots dot-6"></div>
+            <div class="dots dot-7"></div>
+            <div class="dots dot-8"></div>
+            <div class="dots dot-9"></div>
+        </div>
+    </div>
+
+    {# Show this only on Bach page #}
+    {% if firstSegment == 'bach' %}
+
+        {% set category = null %}
+        {% for _category in craft.categories.group('finalistCategories').search('title:' ~ entry.bachType.first) %}
+            {% set category = _category %}
+        {% endfor %}
+
+        <div class="header-square--right header__category-active {% if category.id in vote_categories %}header__category-active--voted{% endif %}">
+            <span class="icomoon-{{ entry.bachType.first }}-small"></span>
+        </div>
+    {% endif %}
+
+    {% set categories = craft.categories.group('finalistCategories') %}
+    <div class="header__menu">
+        <div class="header__menu-title">Categories</div>
+        <ul class="header__menu-list">
+            {% set activeCategory = entry is defined and entry and entry.bachType and entry.bachType.first ? entry.bachType.first.slug : null %}
+            {% for category in categories %}
+                <li class="{% if category.id in vote_categories %}header__menu-category--voted{% endif %}{{ activeCategory == category.slug ? ' header__menu-category--active' }}" data-category="{{ category.title }}">
+                    <a href="/#{{ category.title }}">
+                        <span class="category-{{ category.categoryClass }}"></span>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</header>

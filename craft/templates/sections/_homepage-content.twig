@@ -1,0 +1,37 @@
+{% set entrySuffix = '' %}
+{% if phase == 'phase2' %}
+    {% set entrySuffix = 'Phase2' %}
+{% endif %}
+{% if phase == 'phase3' %}
+    {% set entrySuffix = 'Phase3' %}
+{% endif %}
+
+{% cache %}
+<section class="homepage-content">
+    <div class="homepage-content--left">
+        <div class="homepage-content--text">
+            {{ entry['pageInfo' ~ entrySuffix] }}
+        </div>
+        <div class="homepage-content--video mobile-show">
+            <a href="{{ entry['video' ~ entrySuffix].first.video }}" class="mgp-video icomoon-icon-video">
+                <img src="{{ entry['video' ~ entrySuffix].first.videoImage.first.url }}" alt="">
+            </a>
+        </div>
+        <div class="homepage-content--menu">
+            <h2>View the finalists - select a category</h2>
+            <ul>
+                {% for category in craft.categories.group('finalistCategories') %}
+                    <li data-category="{{ category.title }}">
+                        <span class="icomoon-{{ category.categoryClass }}"></span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="homepage-content--video mobile-hide">
+        <a href="{{ entry['video' ~ entrySuffix].first.video }}" class="mgp-video icomoon-icon-video">
+            <img src="{{ entry['video' ~ entrySuffix].first.videoImage.first.url }}" alt="">
+        </a>
+    </div>
+</section>
+{% endcache %}

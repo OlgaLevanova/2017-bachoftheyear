@@ -1,0 +1,8 @@
+{% set block = craft.globals.getSetByHandle('bookYourNextHoliday') %}
+
+<a href="{{ block.bookHolidayLink }}" class="{{ entryClass }}">
+    <div>
+        {{ block.body }}
+        <span class="icomoon-icon-arrow"></span>
+    </div>
+</a>

@@ -1,0 +1,216 @@
+{#
+ # Layout template
+ # ---------------
+ #
+ # This template defines your site’s global layout. It can be
+ # “extended” by other templates to fill in the gaps.
+ #
+ # See Twig’s Template Inheritance documentation for more details:
+ # http://twig.sensiolabs.org/doc/templates.html#template-inheritance
+ #}
+<!DOCTYPE html>
+<html dir="ltr" lang="en-US">
+<head>
+    <meta charset="utf-8" />
+    {% set defaultSiteTitle = siteName %}
+    {% if entry.title is defined and entry.title != 'Homepage' %}
+        {% set defaultSiteTitle = entry.title ~ ' - ' ~ siteName %}
+    {% endif %}
+
+    {% if entry is defined %}
+
+        {% do craft.sproutSeo.meta({
+            id: entry.id,
+            default: 'bachOfTheYear',
+            title: defaultSiteTitle
+        }) %}
+        {% sproutseo 'optimize' %}
+        {#{{ craft.sproutSeo.optimize() }}#}
+    {% endif %}
+
+    <link rel="home" href="{{ siteUrl }}" />
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="The Space InBetween" />
+    {{ htmlHeader.htmlHeader|raw }}
+
+
+    <link rel="stylesheet" type="text/css" href="/build/app.css?v=2" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+
+    <link rel="shortcut icon" href="/favicon/favicon.ico">
+    <meta name="msapplication-TileColor" content="#ffffff ">
+    <meta name="msapplication-TileImage" content="/favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff ">
+
+    <meta property="og:url" content="{{ craft.request.getUrl() }}" /> 
+    <meta property="og:type" content="website" /> 
+    {% set fbTitle = siteName %}
+    {% if entry.title is defined and entry.title != 'Homepage' %}{% set fbTitle = entry.title ~ ' - ' ~ siteName %}{% endif %}
+    <meta property="og:title" content="{{ fbTitle }}" />
+    {% if entry.section.handle == 'homepage' %}
+        <meta property="og:description" content="{{ entry.pageInfo|striptags }}"/>
+        <meta property="og:image" content="{{ entry.banner.first.backgroundImageVideo.first.url }}" />
+        <meta property="og:image:width" content="{{ entry.banner.first.backgroundImageVideo.first.width }}" />
+        <meta property="og:image:height" content="{{ entry.banner.first.backgroundImageVideo.first.height }}" />
+    {% endif %}
+    {% if entry.section.handle == 'bach' %}
+        <meta property="og:description" content="{{ entry.bachDescription|striptags }}" />
+        <meta property="og:image" content="{{ entry.bachSliderImages.first.url }}" />
+        <meta property="og:image:width" content="{{ entry.bachSliderImages.first.width }}" />
+        <meta property="og:image:height" content="{{ entry.bachSliderImages.first.height }}" />
+    {% endif %}
+    <meta property="fb:app_id" content="2060809790871890" /> 
+
+    {{ htmlHeader.endOfHead|raw }}
+</head>
+
+<body class="{{ entry.type }}">
+    {{ htmlHeader.startOfBody|raw }}
+
+{% set phase = currentPhase.phase.value %}
+{% set firstSegment = craft.request.firstSegment %}
+{% set total_vote_count = craft.social.totalVoteCount() %}
+{% set no_email = craft.session.getFlash('no_email') %}
+
+{% if craft.request.getParam('u') is not null %}
+    {% set unsubscribed = craft.social.unsubsribe(craft.request.getParam('u')) %}
+{% endif %}
+
+    {% set vote_categories = entry is defined ? craft.social.voteCategories(entry.id) %}
+    {% set vote_bachs = entry is defined ? craft.social.getVoteBachs() %}
+
+    {% set badgeColors = {
+        white: '#FFFFFF',
+        yellow: '#FDD863',
+        gold: '#FDD863',
+        silver: '#B5CED3',
+        bronze: '#E8D9C8',
+        supreme: '#E79348',
+        darkBlue: '#364E5D'
+    } %}
+
+    {# Settings for hero section and finalist page #}
+    {% set states = {
+        open: {
+            text: 'open',
+            hex: '#FDD863',
+            badge: 'yellow'
+        },
+        closed: {
+            text: 'closed',
+            hex: '#FDD863',
+            badge: 'yellow'
+        },
+        gold: {
+            text: 'gold',
+            hex: '#FDD863',
+            badge: 'yellow'
+        },
+        silver: {
+            text: 'silver',
+            hex: '#B5CED3',
+            badge: 'silver'
+        },
+        bronze: {
+            text: 'bronze',
+            hex: '#E8D9C8',
+            badge: 'bronze'
+        },
+        supreme: {
+            text: 'supreme',
+            hex: '#E79348',
+            badge: 'supreme'
+        }
+    } %}
+
+    {% set bachState = 'open' %}
+    {% set bachSupreme = '' %}
+    {% if phase == 'phase2' or phase == 'phase3' %}
+        {% set bachState = 'closed' %}
+        {% if entry.winner and entry.winner | length and entry.winner.value != 'no' and entry.winner.value != '[]' %}
+            {% set bachState = entry.winner.value %}
+        {% endif %}
+    {% endif %}
+    {% if phase == 'phase3' %}
+        {% if entry.section.handle == 'homepage' or (entry.winner and entry.winner | length and entry.winner.value != 'no' and entry.suprimeWinner | length) %}
+            {% set bachState = 'supreme' %}
+
+            {% for bach in craft.entries.section('bach').search('suprimeWinner:yes').limit(1) %}
+                {% set bachSupreme = bach %}
+            {% endfor %}
+
+        {% endif %}
+    {% endif %}
+
+    {% set state = states[bachState] %}
+     {% set isHomePage = not craft.request.firstSegment %}
+
+    {% set voteText %}{% spaceless %}
+        {% if state.text == 'open' %}
+            {% if entry.bachType.first %}
+                {% set vote = craft.social.voteResults(entry.id) %}
+                {% if vote == 1 %}
+                    {#<div class="hero__vote-text">Thanks <span class="show-for-large">{{ currentUser.friendlyName }}</span>, you're in the draw</div>#}
+                    <div class="hero__vote-text">You've already voted in this category</div>
+                {% elseif vote == 2 %}
+                    <div class="hero__vote-text">Thanks<span class="show-for-large">&nbsp;{{ currentUser.friendlyName }}</span>, you're in the draw</div>
+                {% else %}
+                    Vote for this bach with Facebook
+                {% endif %}
+            {% else %}
+                {% if isHomePage %}
+                    <svg class="hero__vote-svg hero__vote-svg--tick" width="18" height="14" viewBox="0 0 18 14" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><path d="M-3-5h24v24H-3"/><path class="svg-icon" fill="#364E5D" fill-rule="nonzero" d="M6 11.2L1.8 7 .4 8.4 6 14 18 2 16.6.6"/></g></svg>
+                {% endif %}
+                <span class="hero__vote-text{{ isHomePage ? ' hero__vote-text--large' }}">{{ total_vote_count|number_format(0) }}&nbsp;</span><span class="hero__vote-text{{ isHomePage ? ' hero__vote-text--small' }}">vote{% if total_vote_count != 1 %}s{% endif %} so far</span>
+            {% endif %}
+        {% elseif state.text == 'gold' or state.text == 'silver' or state.text == 'bronze'  %}
+            {% set bestType = '' %}
+            {% for category in craft.categories.group('finalistCategories').search('title:' ~ entry.bachType.first) %}
+                {% set bestType = category.categoryClass | upper | replace('-', ' ') %}
+            {% endfor %}
+
+            <span class="hero__vote-text">{{ state.text }} - best {{ bestType }}</span>
+        {% elseif state.text == 'supreme' %}
+            <span class="hero__vote-text hero__vote-text--vote">
+                <span class="show-for-large">Supreme Winner - </span> Bach of the Year
+            </span>
+        {% else %}
+            <span class="hero__vote-text">Voting is now closed</span>
+        {% endif %}
+    {% endspaceless %}{% endset %}
+
+     {#END Settings#}
+
+    {% include 'partials/_header' %}
+    <main>
+        {% block content %}
+            <p>If you see me, you haven’t set your <code>{% verbatim %}{% block content %}…{% endblock %}{% endverbatim %}</code> yet.</p>
+            <p>See Twig’s <a href="http://twig.sensiolabs.org/doc/templates.html#template-inheritance">Template Inheritance</a> documentation for an explanation.</p>
+        {% endblock %}
+    </main>
+    {% include 'partials/_footer' %}
+
+    <script src="/build/app.js"></script>
+
+    {% if firstSegment == 'bach' %}
+    <!-- Go to www.addthis.com/dashboard to customize your tools -->
+        <!-- Go to www.addthis.com/dashboard to customize your tools --> <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-59cb0c7e43d6879b"></script>
+    {% endif %}
+
+</body>
+</html>

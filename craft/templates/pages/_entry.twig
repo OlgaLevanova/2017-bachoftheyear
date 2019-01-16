@@ -1,0 +1,20 @@
+{% extends "_layout" %}
+
+{% block content %}
+
+	{% include "/sections/_hero" with {
+		state: state,
+		voteText: voteText
+	} %}
+
+    {% switch entry.type %}
+
+        {% case 'generic' %}
+            {% include "/pages/content/_generic-template" %}
+            
+        {% default %}
+            {% include "/pages/content/_generic-template" %}
+
+    {% endswitch %}
+
+{% endblock %}

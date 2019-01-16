@@ -1,0 +1,96 @@
+<section class="finalists">
+{% set blocks %}
+{% cache %}
+{% for entry in entry.finalists %}
+    {% set entryClass = "finalist-block " ~ entry.type  %}
+
+        {% switch entry.type %}
+
+            {% case 'category' %}
+                {% include "/sections/blocks/_category" with {entryClass:entryClass} %}
+
+            {% case 'quoteBlock' %}
+                {% include "/sections/blocks/_quote-block" with {entryClass:entryClass} %}
+
+            {% case 'imageBlock' %}
+                {% include "/sections/blocks/_image-block" with {entryClass:entryClass} %}
+
+            {% case 'videoBlock' %}
+                {% include "/sections/blocks/_video-block" with {entryClass:entryClass} %}
+
+            {% case 'winA1000Block' %}
+                {% include "/sections/blocks/_win-1000-block" with {
+                    entryPosition:"outside",
+                    entryColor:entry.backgroundColor.first | lower | replace(' ', '-')
+                } %}
+
+            {% case 'imageWithLink' %}
+                {% include "/sections/blocks/_image-with-link" with {entryClass:entryClass} %}
+
+            {% default %}
+                {% include "/sections/blocks/_category" with {entryClass:entryClass} %}
+
+        {% endswitch %}
+
+{% endfor %}
+    {% include "/sections/blocks/_book-holiday-block" with {entryClass:"finalist-block bookHolidayBlock"} %}
+</section>
+{% endcache %}
+{% endset %}
+
+
+{# Set up and array of all dynamic content needing to be replaced dynamically #}
+{% set replaces = [] %}
+
+{% set all_bach_ids = craft.entries.section('bach').ids() %}
+{% for b_id in all_bach_ids %}
+    {% set replaces = replaces|merge({ ('data-vote-count-'~b_id): '0 <span>votes</span>' }) %}
+{% endfor %}
+
+{% set all_votes = craft.social.AllVoteCount() %}
+{% for key, value in all_votes %}
+    {% if value.votes == 1 %}
+        {% set replaces = replaces|merge({ ('data-vote-count-'~value.bach_id): value.votes ~ ' <span>vote</span>' }) %}
+    {% else %}
+        {% set replaces = replaces|merge({ ('data-vote-count-'~value.bach_id): value.votes ~ ' <span>votes</span>' }) %}
+    {% endif %}
+{% endfor %}
+
+{% for category in craft.categories.group('finalistCategories') %}
+    {% if phase == "phase1" %}
+        {% set replaces = replaces|merge({ ('data-vote-bach-view-'~category.id): 'Vote now' }) %}
+    {% else %}
+        {% set replaces = replaces|merge({ ('data-vote-bach-view-'~category.id): 'View finalist' }) %}
+    {% endif %}
+{% endfor %}
+
+{% for vote_category in vote_categories %}
+    {% set replaces = replaces|merge({ ('data-voted-category-'~vote_category): 'category-voted' }) %}
+    {% set replaces = replaces|merge({ ('data-vote-bach-view-'~vote_category): 'View finalist' }) %}
+{% endfor %}
+
+{% for vote_bach in vote_bachs %}
+    {% set replaces = replaces|merge({ ('data-voted-bach-'~vote_bach): 'parent-category-voted' }) %}
+{% endfor %}
+
+{# Replace all dynamic content from above #}
+{% for key, value in replaces %}
+    {% set blocks = blocks|replace({(key) : (value),}) %}
+{% endfor %}
+
+{{ blocks|raw }}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

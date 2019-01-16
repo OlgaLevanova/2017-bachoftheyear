@@ -1,0 +1,55 @@
+{% set footer = craft.globals.getSetByHandle('footer') %}
+{% cache globally %}
+<footer class="footer">
+    <div class="footer-row">
+        <div class="footer-left">
+            {% set image = footer.footerLogo.first %}
+            {% if image %}
+                <a href="http://www.bookabach.co.nz">
+                    <img src="{{ image.url }}" alt="Book a bach" class="footer-logo">
+                </a>
+            {% endif %}
+
+            {% set links = footer.footerLeftLinks.footerLinks %}
+            {% if links | length %}
+            <ul>
+                {% for link in links %}
+                    {% if link.type == 'footerLinks2' %}
+                        <li>
+                            {{ link.linkName.htmlLink }}
+                        </li>
+                    {% endif %}
+                {#<li><a href="{{ link.footerEntry.first.url }}">{{ link.footerLinkName }}</a></li>#}
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        <div class="footer-right">
+            {% set links = footer.footerRightLinks.footerLinks %}
+            {% if links | length %}
+            <ul>
+                {% for link in links %}
+                    {% if link.type == 'footerLinks3' %}
+                        <li>
+                            {{ link.linkName.htmlLink }}
+                        </li>
+                    {% endif %}
+                    {#<li><a href="{{ link.footerEntry.first.url }}">{{ link.footerLinkName }}</a></li>#}
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+            {% set image = footer.footerRightimage.first %}
+            {% if image %}
+                <a href="http://homeaway.com/">
+                    <img src="{{ image.url }}" alt="Homeaway" class="footer-homeaway">
+                </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="copyright">
+        {{ footer.copyrightInfo }}
+    </div>
+</footer>
+{% endcache %}

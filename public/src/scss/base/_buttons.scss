@@ -1,0 +1,33 @@
+.button {
+    display: inline-block;
+    width:100%;
+    padding: rem(22) rem(10);
+    margin-right:0;
+    color: $white;
+    font-family:$GothamBlack;
+    font-size: rem(18);
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: all 0.2s;
+
+    @media all and (min-width: $small-breakpoint) {
+        width:auto;
+        padding: rem(22) rem(60);
+        margin-right:rem(15);
+    }
+    &--primary {
+        background-color: $blue-dark;
+
+        &:hover, &.active {
+            background-color: $blue-light;
+        }
+    }
+    &--secondary {
+        background-color: $blue-light;
+
+        &:hover, &.active {
+            background-color: $blue-dark;
+        }
+    }
+}

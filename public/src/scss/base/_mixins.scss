@@ -1,0 +1,306 @@
+@function rem($size, $context: $base-font-size) {
+    $remSize: $size / $context;
+    @return #{$remSize}rem;
+}
+
+@mixin placeholder ($color, $font) {
+    ::-webkit-input-placeholder { /* Chrome */
+        color: $color;
+        font-size: rem(12);
+
+        @media all and (min-width: $small-breakpoint-max) {
+            font-size: $font;
+        }
+    }
+
+    :-ms-input-placeholder { /* IE 10+ */
+        color: $color;
+        font-size: rem(12);
+
+        @media all and (min-width: $small-breakpoint-max) {
+            font-size: $font;
+        }
+    }
+
+    ::-moz-placeholder { /* Firefox 19+ */
+        color: $color;
+        font-size: rem(12);
+        opacity: 1;
+
+        @media all and (min-width: $small-breakpoint-max) {
+            font-size: $font;
+        }
+    }
+
+    :-moz-placeholder { /* Firefox 4 - 18 */
+        color: $color;
+        font-size: rem(12);
+        opacity: 1;
+
+        @media all and (min-width: $small-breakpoint-max) {
+            font-size: $font;
+        }
+    }
+}
+
+@mixin icomoon() {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: icomoon !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    line-height: 1;
+    text-transform: none;
+    speak: none;
+}
+
+@mixin backgroundTile(){
+    &:before{
+        position:absolute;
+        top:50%;
+        left:50%;
+        width:95%;
+        height:95%;
+        content:'';
+        opacity:0;
+        transform:translate(-50%, -50%);
+        transition:all 0.2s;
+        will-change: opacity, transform;
+    }
+    &.light-blue{
+        &:before{
+            background:$blue-light;
+        }
+    }
+    &.dark-blue{
+        &:before{
+            background:$blue-dark;
+        }
+    }
+    &.yellow{
+        &:hover,
+        &:active,
+        &:focus,
+        &.hover{
+            color:$blue-dark;
+        }
+        &:before{
+            background:$yellow;
+        }
+    }
+    &:hover,
+    &:active,
+    &:focus,
+    &.hover{
+        &:before{
+            opacity:0.9;
+        }
+    }
+}
+
+@mixin category-voted-icon-sm{
+    &:after{
+        position:absolute;
+        top:-10px;
+        left:15px;
+        width:20px;
+        height:20px;
+        color:$blue-dark;
+        font-size:12px;
+        line-height:0;
+        text-align:center;
+        background:url('/images/icons/icon-voted-small.svg');
+        background-size:20px 20px;
+        content:'';
+    }
+}
+
+@mixin categories-icons-big{
+    &design{
+        &:before{
+            content:'\e901';
+        }
+    }
+    &familyFriendly{
+        &:before{
+            content:'\e903';
+        }
+    }
+    &charm{
+        &:before{
+            content:'\e900';
+        }
+    }
+    &hospitality{
+        &:before{
+            content:'\e904';
+        }
+    }
+    &petFriendly{
+        &:before{
+            content:'\e905';
+        }
+    }
+    &setting{
+        &:before{
+            content:'\e906';
+        }
+    }
+    &urban{
+        &:before{
+            content:'\e907';
+        }
+    }
+    &eco{
+        &:before{
+            content:'\e902';
+        }
+    }
+}
+
+@mixin categories-icons-small{
+    &design{
+        &:before{
+            content:'\e909';
+        }
+    }
+    &familyFriendly{
+        &:before{
+            content:'\e90b';
+        }
+    }
+    &charm{
+        &:before{
+            content:'\e908';
+        }
+    }
+    &hospitality{
+        &:before{
+            content:'\e90c';
+        }
+    }
+    &petFriendly{
+        &:before{
+            content:'\e90d';
+        }
+    }
+    &setting{
+        &:before{
+            content:'\e90e';
+        }
+    }
+    &urban{
+        &:before{
+            content:'\e90f';
+        }
+    }
+    &eco{
+        &:before{
+            content:'\e90a';
+        }
+    }
+}
+
+// Use with $breakpoints map from _vars.
+@mixin bp($breakpoint) {
+    @if map-has-key($breakpoints, $breakpoint) {
+        @media (min-width: #{map-get($breakpoints, $breakpoint)}) {
+            @content;
+        }
+    } @else {
+        @warn 'Unfortunately, no value could be retrieved from `#{$breakpoint}`. '
+            + 'Please make sure it is defined in `$breakpoints` map.';
+    }
+}
+
+@mixin container-padding() {
+    padding-right: $gutter-small;
+    padding-left: $gutter-small;
+
+    @include bp(m) {
+        padding-right: $gutter-medium;
+        padding-left: $gutter-medium;
+    }
+
+    @include bp(l) {
+        padding-right: $gutter-large;
+        padding-left: $gutter-large;
+    }
+}
+
+@mixin container-padding-double() {
+    padding-right: $gutter-small * 2;
+    padding-left: $gutter-small * 2;
+
+    @include bp(m) {
+        padding-right: $gutter-medium * 2;
+        padding-left: $gutter-medium * 2;
+    }
+
+    @include bp(l) {
+        padding-right: $gutter-large * 2;
+        padding-left: $gutter-large * 2;
+    }
+}
+
+// Grid row
+@mixin flex-row($gutter: '') {
+    display: flex;
+    flex-flow: row wrap;
+
+    @if ($gutter != '') {
+        margin-right: -$gutter;
+        margin-left: -$gutter;
+    } @else {
+        margin-right: -$gutter-small;
+        margin-left: -$gutter-small;
+
+        @include bp(m) {
+            margin-right: -$gutter-medium;
+            margin-left: -$gutter-medium;
+        }
+
+        @include bp(l) {
+            margin-right: -$gutter-large;
+            margin-left: -$gutter-large;
+        }
+    }
+}
+
+// Grid item
+@mixin flex-item($flex: 0 0 auto, $gutter: '') {
+    // Pixel basis
+    @if (type-of($flex) == 'number' and unit($flex) == 'px') {
+        flex: 0 0 $flex;
+        max-width: $flex;
+        // Percentage within 12 column grid basis
+    } @else if (type-of($flex) == 'number') {
+        $percentage: percentage($flex / 12);
+        flex: 0 0 $percentage;
+        max-width: $percentage;
+        // Default basis
+    } @else {
+        flex: $flex;
+    }
+
+    @if ($gutter != '') {
+        padding-right: $gutter;
+        padding-left: $gutter;
+    } @else {
+        padding-right: $gutter-small;
+        padding-left: $gutter-small;
+
+        @include bp(m) {
+            padding-right: $gutter-medium;
+            padding-left: $gutter-medium;
+        }
+
+        @include bp(l) {
+            padding-right: $gutter-large;
+            padding-left: $gutter-large;
+        }
+    }
+}
+

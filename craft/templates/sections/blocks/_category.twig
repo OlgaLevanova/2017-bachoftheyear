@@ -1,0 +1,29 @@
+{% set color = '' %}
+{% set category = '' %}
+{% for _category in craft.categories.group('finalistCategories').search('title:' ~ entry.categoryName.value) %}
+    {% set color = _category.categoryColor.first | lower | replace(' ', '-') %}
+    {% set category = _category %}
+{% endfor %}
+
+<div class="{{ entryClass }} {{ color }}" data-category="{{ entry.categoryName.value }}">
+    <img src="{{ entry.categoryImage.first.url }}" alt="{{ entry.categoryName.value }}">
+    <span class="category-name category-{{ entry.categoryName.value }} data-voted-category-{{ category.id }}"></span>
+    <span class="category-view">View finalists</span>
+    <span class="category-close icomoon-icon-close"></span>
+</div>
+
+{% include "/sections/blocks/_category-description" with {entryClass:"finalist-block category-description", color: color} %}
+
+{% for bach in craft.entries.section('bach').search('bachType:' ~ entry.categoryName.value) %}
+    {% include "/sections/blocks/_bach-blocks" with {
+        entryClass:"finalist-block bach",
+        color: color,
+        categoryId: category.id,
+        category: entry.categoryName.value
+    } %}
+{% endfor %}
+
+{% include "/sections/blocks/_win-1000-block" with {
+    entryPosition:"inside",
+    entryColor:color
+} %}
